@@ -11,7 +11,7 @@ function SearchBar(props) {
         name="search"
         onChange={() => {}}
       ></input>
-      <button type="submit">
+      <button type="submit" className="submit-button">
         {/* Need to add a magnifying glass buton here or figure out how to do svgs*/}
       </button>
     </form>

@@ -1,5 +1,6 @@
 import SearchBar from "./components/SearchBar";
-import apiKey from "../config.js";
+import Nav from "./components/Nav";
+import apiKey from "./config.js";
 
 function App() {
   const fetchPics = (genre) => {};
@@ -7,6 +8,7 @@ function App() {
   return (
     <div className="App">
       <SearchBar />
+      <Nav />
     </div>
   );
 }

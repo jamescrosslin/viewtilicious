@@ -1,8 +1,12 @@
 import React from "react";
 
 function Photo(props) {
-  const { prop } = props;
-  return <img />;
+  const { src, alt } = props;
+  return (
+    <li>
+      <img src={src} alt={alt} />
+    </li>
+  );
 }
 
 export default Photo;

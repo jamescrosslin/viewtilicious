@@ -67,7 +67,7 @@ input {
 .photo-container ul {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   -ms-align-items: flex-start;
   align-items: flex-start;
 }

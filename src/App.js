@@ -28,7 +28,7 @@ function App() {
           photos: { photo },
         },
       } = await axios.get(
-        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&tag_mode=any&per_page=24&format=json&nojsoncallback=1`
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&tag_mode=all&per_page=24&format=json&nojsoncallback=1`
       );
       setPhotos(() => photo);
     }

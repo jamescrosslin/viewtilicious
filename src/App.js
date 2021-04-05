@@ -18,28 +18,28 @@ const mockData = [
 
 function App() {
   const [photos, setPhotos] = useState([]);
-
-  async function fetchPics(searchTerms) {
-    searchTerms = searchTerms.join(",").replaceAll(/\W/gi, ",");
-    const {
-      data: {
-        photos: { photo },
-      },
-    } = await axios.get(
-      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&per_page=24&format=json&nojsoncallback=1`
-    );
-
-    return photo;
-  }
+  const [query, setQuery] = useState(["hello"]);
 
   useEffect(() => {
-    const photos = fetchPics(["hello"]);
-    setPhotos(() => photos);
-  }, []);
+    async function fetchPics() {
+      const searchTerms = query.join(",").replaceAll(/\W/gi, ",");
+      const {
+        data: {
+          photos: { photo },
+        },
+      } = await axios.get(
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&per_page=24&format=json&nojsoncallback=1`
+      );
+      console.log(photo);
+      setPhotos(() => photo);
+    }
+
+    fetchPics(["hello"]);
+  }, [query]);
 
   return (
     <div className="App">
-      <SearchBar />
+      <SearchBar setQuery={setQuery} />
       <Nav />
       <Gallery data={photos} />
     </div>

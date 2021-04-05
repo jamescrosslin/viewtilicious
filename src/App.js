@@ -17,7 +17,7 @@ const mockData = [
 ];
 
 function App() {
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState(null);
   const [query, setQuery] = useState(["hello"]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function App() {
     <div className="App">
       <SearchBar setQuery={setQuery} />
       <Nav />
-      <Gallery data={photos} />
+      {photos ? <Gallery data={photos} /> : <span>Loading...</span>}
     </div>
   );
 }

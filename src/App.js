@@ -3,7 +3,7 @@ import Nav from "./components/Nav";
 import Gallery from "./components/Gallery";
 import apiKey from "./config.js";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const mockData = [
   {
@@ -17,23 +17,31 @@ const mockData = [
 ];
 
 function App() {
-  const fetchPics = (searchTerms = ["cats"]) => {
+  const [photos, setPhotos] = useState([]);
+
+  async function fetchPics(searchTerms) {
     searchTerms = searchTerms.join(",").replaceAll(/\W/gi, ",");
-    axios
-      .get(
-        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&per_page=24&format=json&nojsoncallback=1`
-      )
+    const {
+      data: {
+        photos: { photo },
+      },
+    } = await axios.get(
+      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&per_page=24&format=json&nojsoncallback=1`
+    );
 
-      .then((res) => console.log(res));
-  };
+    return photo;
+  }
 
-  useEffect(fetchPics, []);
+  useEffect(() => {
+    const photos = fetchPics(["hello"]);
+    setPhotos(() => photos);
+  }, []);
 
   return (
     <div className="App">
       <SearchBar />
       <Nav />
-      <Gallery data={""} />
+      <Gallery data={photos} />
     </div>
   );
 }

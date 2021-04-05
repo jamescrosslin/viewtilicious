@@ -4,13 +4,13 @@ import Photo from "./Photo";
 function Gallery(props) {
   const { data } = props;
   return (
-    <div class="photo-container">
+    <div className="photo-container">
       <h2>Results</h2>
       <ul>
         {data?.length ? (
           data.map((pic) => <Photo src={pic.url} alt={pic.desc} />)
         ) : (
-          <li class="not-found">
+          <li className="not-found">
             <h3>No Results Found</h3>
             <p>You search did not return any results. Please try again.</p>
           </li>

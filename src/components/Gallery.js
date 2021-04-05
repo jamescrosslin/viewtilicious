@@ -3,7 +3,6 @@ import Photo from "./Photo";
 
 function Gallery(props) {
   const { data } = props;
-  console.log(data);
   return (
     <div className="photo-container">
       <h2>Results</h2>

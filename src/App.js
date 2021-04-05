@@ -22,15 +22,14 @@ function App() {
 
   useEffect(() => {
     async function fetchPics() {
-      const searchTerms = query.join(",").replaceAll(/\W/gi, ",");
+      const searchTerms = query;
       const {
         data: {
           photos: { photo },
         },
       } = await axios.get(
-        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&per_page=24&format=json&nojsoncallback=1`
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&tag_mode=any&per_page=24&format=json&nojsoncallback=1`
       );
-      console.log(photo);
       setPhotos(() => photo);
     }
 

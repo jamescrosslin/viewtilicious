@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 
-function SearchBar(props) {
-  const [searchText, setSearchText] = useState("");
-
+function SearchBar({ setQuery }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(searchText);
+    const query = e.target[0].value.split(/[^\w\d]/).join("+");
+    setQuery(query);
     //put callback to send state to App.js here
     e.currentTarget.reset();
-  };
-
-  const saveText = (e) => {
-    const inputText = e.currentTarget.value;
-    setSearchText(() => inputText);
   };
 
   return (
@@ -21,7 +15,6 @@ function SearchBar(props) {
         type="search"
         placeholder="Search for an image..."
         name="search"
-        onChange={saveText}
         required
       ></input>
       <button type="submit" className="submit-button">

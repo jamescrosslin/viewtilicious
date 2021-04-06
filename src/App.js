@@ -5,7 +5,7 @@ import Loading from "./components/Loading";
 import apiKey from "./config.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { matchPath, Route, Switch, useLocation } from "react-router";
+import { Route, Switch, useLocation } from "react-router";
 
 function App() {
   const { pathname } = useLocation();

@@ -1,28 +1,31 @@
 import SearchBar from "./components/SearchBar";
 import Nav from "./components/Nav";
 import Gallery from "./components/Gallery";
+import Loading from "./components/Loading";
 import apiKey from "./config.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-const mockData = [
-  {
-    url: "https://farm5.staticflickr.com/4334/37032996241_4c16a9b530.jpg",
-    alt: "1st image",
-  },
-  {
-    url: "https://farm5.staticflickr.com/4342/36338751244_316b6ee54b.jpg",
-    alt: "2nd image",
-  },
-];
+import { matchPath, Route, Switch, useLocation } from "react-router";
 
 function App() {
+  const { pathname } = useLocation();
+  const queryRegex = /^\/(.+)$/gi;
+  const path = queryRegex.test(pathname)
+    ? pathname.replace(queryRegex, "$1")
+    : null;
+
   const [photos, setPhotos] = useState(null);
-  const [query, setQuery] = useState(["hello"]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState(path);
+
+  function handleQuery(text) {
+    setQuery(() => text);
+  }
 
   useEffect(() => {
     async function fetchPics() {
-      const searchTerms = query;
+      await setLoading(() => true);
+      const searchTerms = query.split(/[^\w\d]/).join("+");
       const {
         data: {
           photos: { photo },
@@ -30,17 +33,23 @@ function App() {
       } = await axios.get(
         `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${searchTerms}&tag_mode=all&per_page=24&format=json&nojsoncallback=1`
       );
-      setPhotos(() => photo);
+      await setPhotos(() => photo);
+      await setLoading(() => false);
     }
 
-    fetchPics(["hello"]);
+    if (query) fetchPics();
   }, [query]);
 
   return (
-    <div className="App">
-      <SearchBar setQuery={setQuery} />
+    <div className="container">
+      <SearchBar makeQuery={handleQuery} />
       <Nav />
-      {photos ? <Gallery data={photos} /> : <span>Loading...</span>}
+      <Switch>
+        <Route exact path="/" />
+        <Route path="/:query">
+          {loading ? <Loading /> : <Gallery data={photos} />}
+        </Route>
+      </Switch>
     </div>
   );
 }

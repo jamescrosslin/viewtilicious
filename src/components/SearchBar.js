@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 
-function SearchBar({ setQuery }) {
+function SearchBar({ makeQuery }) {
+  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const query = e.target[0].value.split(/[^\w\d]/).join("+");
-    setQuery(query);
-    //put callback to send state to App.js here
+
+    const query = e.target[0].value;
+    makeQuery(query);
+    history.push(`/${query}`);
+
     e.currentTarget.reset();
   };
 

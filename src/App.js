@@ -8,17 +8,23 @@ import { useEffect, useState } from "react";
 import { Route, Switch, useLocation } from "react-router";
 
 function App() {
+  const [topics] = useState(["Cats", "Dogs", "Waterslides"]);
   const { pathname } = useLocation();
+  const queryRegex = /^\/(.+)$/gi;
+  const path = queryRegex.test(pathname)
+    ? pathname.replace(queryRegex, "$1")
+    : null;
 
-  const [photos, setPhotos] = useState(null);
+  const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState(null);
+  const [query, setQuery] = useState(path);
+  const [navs, setNavs] = useState({});
 
   function handleQuery(text) {
     setQuery(() => text);
   }
 
-  async function handleFetch(tags) {
+  async function fetchPics(tags) {
     const {
       data: {
         photos: { photo },
@@ -30,31 +36,42 @@ function App() {
   }
 
   useEffect(() => {
-    async function fetchPics() {
+    async function handleFetch() {
       await setLoading(() => true);
       const searchTerms = query.split(/[^\w\d]/).join("+");
-      const photo = await handleFetch(searchTerms);
+      const photo = await fetchPics(searchTerms);
       await setPhotos(() => photo);
       await setLoading(() => false);
     }
 
-    const queryRegex = /^\/(.+)$/gi;
-    const path = queryRegex.test(pathname)
-      ? pathname.replace(queryRegex, "$1")
-      : null;
+    if (query) handleFetch();
+  }, [query]);
 
-    handleQuery(path);
-    if (query) fetchPics();
-  }, [query, pathname]);
+  useEffect(() => {
+    async function getTopics(topics) {
+      const navObj = {};
+      for (const topic of topics) {
+        const results = await fetchPics(topic);
+        navObj[topic] = results;
+      }
+      setNavs(navObj);
+    }
+    getTopics(topics);
+  }, [topics]);
 
   return (
     <div className="container">
       <SearchBar makeQuery={handleQuery} />
-      <Nav />
+      <Nav topics={topics} />
       <Switch>
         <Route exact path="/" />
-        <Route path="/:query">
-          {loading ? <Loading /> : <Gallery data={photos} />}
+        <Route path={[...Object.keys(navs)].map((word) => "/" + word)}>
+          <Gallery data={navs[path]} loading={false} />
+        </Route>
+
+        <Route path="/search/:query">
+          {/* maybe have routes in children of gallery, jumping come from failure to render photo-container, or put a photo-container div around the home route */}
+          <Gallery data={photos} loading={loading} />
         </Route>
       </Switch>
     </div>

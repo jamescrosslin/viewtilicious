@@ -1,19 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-function Nav() {
+function Nav({ topics }) {
   return (
     <nav className="main-nav">
       <ul>
-        <li>
-          <NavLink to="/cats">Cats</NavLink>
-        </li>
-        <li>
-          <NavLink to="/dogs">Dogs</NavLink>
-        </li>
-        <li>
-          <NavLink to="/computers">Computers</NavLink>
-        </li>
+        {topics.map((topic, i) => (
+          <li key={i}>
+            <NavLink to={`/${topic}`}>{topic}</NavLink>
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -2,12 +2,12 @@ import React from "react";
 import Photo from "./Photo";
 
 function Gallery(props) {
-  const { data } = props;
+  const { data, loading } = props;
   return (
     <div className="photo-container">
       <h2>Results</h2>
       <ul>
-        {data?.length ? (
+        {data?.length && !loading ? (
           data.map((pic) => <Photo key={pic.id} {...pic} />)
         ) : (
           <li className="not-found">

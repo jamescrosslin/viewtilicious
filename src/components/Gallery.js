@@ -1,11 +1,10 @@
 import React from "react";
 import Photo from "./Photo";
 
-function Gallery(props) {
-  const { data } = props;
+function Gallery({ data, message }) {
   return (
     <div className="photo-container">
-      <h2>Results</h2>
+      <h2>{message}</h2>
       <ul>
         {data?.length ? (
           data.map((pic) => <Photo key={pic.id} {...pic} />)

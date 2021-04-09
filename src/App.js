@@ -37,20 +37,19 @@ function App() {
   }, [topics]);
 
   return (
-    <BrowserRouter>
-      <div className="container">
-        <SearchBar />
-        <Nav topics={topics} />
-        <Switch>
-          <Route exact path="/">
-            <h2>Click around or search!</h2>
+    <div className="container">
+      <SearchBar />
+      <Nav topics={topics} />
+      <Switch>
+        <Route exact path="/">
+          <h2>Click around or search!</h2>
+        </Route>
+        {topics.map((topic, i) => (
+          <Route key={`${i}`} path={`/${topic}`}>
+            {navs ? <Gallery data={navs[topic]} /> : <Loading />}
           </Route>
-          {topics.map((topic, i) => (
-            <Route key={`${i}`} path={`/${topic}`}>
-              {navs ? <Gallery data={navs[topic]} /> : <Loading />}
-            </Route>
-          ))}
-          {/* <Route path="/flowers">
+        ))}
+        {/* <Route path="/flowers">
             <Gallery data={navs.flowers} />
           </Route>
           <Route path="/babies">
@@ -60,21 +59,20 @@ function App() {
             <Gallery data={navs.fruit} />
           </Route> */}
 
-          <Route path="/search/:query">
-            {/* maybe have routes in children of gallery, jumping come from failure to render photo-container, or put a photo-container div around the home route */}
+        <Route path="/search/:query">
+          {/* maybe have routes in children of gallery, jumping come from failure to render photo-container, or put a photo-container div around the home route */}
 
-            <SearchResults fetchPics={fetchPics} />
-          </Route>
-          <Route>
-            <div>
-              Oops, you went too hard in the URL and found out that route does
-              not exist. Click one of the wonderful preselected topics or type a
-              search into the bar to get some sweet images of INSERT TOPIC HERE.
-            </div>
-          </Route>
-        </Switch>
-      </div>
-    </BrowserRouter>
+          <SearchResults fetchPics={fetchPics} />
+        </Route>
+        <Route>
+          <div>
+            Oops, you went too hard in the URL and found out that route does not
+            exist. Click one of the wonderful preselected topics or type a
+            search into the bar to get some sweet images of INSERT TOPIC HERE.
+          </div>
+        </Route>
+      </Switch>
+    </div>
   );
 }
 

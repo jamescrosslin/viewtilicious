@@ -13,8 +13,8 @@ function SearchResults({ fetchPics }) {
       await setLoading(() => true);
       const searchTerms = query.split(/[^\w\d]/).join("+");
       const photo = await fetchPics(searchTerms);
+      setTimeout(() => setLoading(() => false), 2000);
       await setPhotos(() => photo);
-      await setLoading(() => false);
     }
 
     handleFetch();

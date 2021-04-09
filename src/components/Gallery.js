@@ -7,7 +7,9 @@ function Gallery({ data, message }) {
       <h2>{message}</h2>
       <ul>
         {data?.length ? (
-          data.map((pic) => <Photo key={pic.id} {...pic} />)
+          data.map((pic, i, arr) => (
+            <Photo delay={(4 - (i % 4)) / 10} key={pic.id} {...pic} />
+          ))
         ) : (
           <li className="not-found">
             <h3>No Results Found</h3>

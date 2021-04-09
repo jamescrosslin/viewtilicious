@@ -1,8 +1,9 @@
 import React from "react";
 
-function Photo({ id, secret, server, title }) {
+function Photo({ delay, id, secret, server, title }) {
+  console.log(delay);
   return (
-    <li>
+    <li style={{ animationDelay: `${delay}s` }}>
       <img
         src={`https://live.staticflickr.com/${server}/${id}_${secret}.jpg`}
         alt={title}

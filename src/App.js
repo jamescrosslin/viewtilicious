@@ -5,24 +5,13 @@ import Loading from "./components/Loading";
 import apiKey from "./config.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Route, Switch, useLocation } from "react-router";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import SearchResults from "./components/SearchResults";
 
 function App() {
-  const [topics] = useState(["Cats", "Dogs", "Waterslides"]);
-  const { pathname } = useLocation();
-  const queryRegex = /^\/(.+)$/gi;
-  const path = queryRegex.test(pathname)
-    ? pathname.replace(queryRegex, "$1")
-    : null;
+  const [topics, setTopics] = useState(["Flowers", "Babies", "Fruit"]);
 
-  const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState(path);
-  const [navs, setNavs] = useState({});
-
-  function handleQuery(text) {
-    setQuery(() => text);
-  }
+  const [navs, setNavs] = useState(null);
 
   async function fetchPics(tags) {
     const {
@@ -34,18 +23,6 @@ function App() {
     );
     return photo;
   }
-
-  useEffect(() => {
-    async function handleFetch() {
-      await setLoading(() => true);
-      const searchTerms = query.split(/[^\w\d]/).join("+");
-      const photo = await fetchPics(searchTerms);
-      await setPhotos(() => photo);
-      await setLoading(() => false);
-    }
-
-    if (query) handleFetch();
-  }, [query]);
 
   useEffect(() => {
     async function getTopics(topics) {
@@ -60,21 +37,44 @@ function App() {
   }, [topics]);
 
   return (
-    <div className="container">
-      <SearchBar makeQuery={handleQuery} />
-      <Nav topics={topics} />
-      <Switch>
-        <Route exact path="/" />
-        <Route path={[...Object.keys(navs)].map((word) => "/" + word)}>
-          <Gallery data={navs[path]} loading={false} />
-        </Route>
+    <BrowserRouter>
+      <div className="container">
+        <SearchBar />
+        <Nav topics={topics} />
+        <Switch>
+          <Route exact path="/">
+            <h2>Click around or search!</h2>
+          </Route>
+          {topics.map((topic, i) => (
+            <Route key={`${i}`} path={`/${topic}`}>
+              {navs ? <Gallery data={navs[topic]} /> : <Loading />}
+            </Route>
+          ))}
+          {/* <Route path="/flowers">
+            <Gallery data={navs.flowers} />
+          </Route>
+          <Route path="/babies">
+            <Gallery data={navs.babies} />
+          </Route>
+          <Route path="/fruit">
+            <Gallery data={navs.fruit} />
+          </Route> */}
 
-        <Route path="/search/:query">
-          {/* maybe have routes in children of gallery, jumping come from failure to render photo-container, or put a photo-container div around the home route */}
-          <Gallery data={photos} loading={loading} />
-        </Route>
-      </Switch>
-    </div>
+          <Route path="/search/:query">
+            {/* maybe have routes in children of gallery, jumping come from failure to render photo-container, or put a photo-container div around the home route */}
+
+            <SearchResults fetchPics={fetchPics} />
+          </Route>
+          <Route>
+            <div>
+              Oops, you went too hard in the URL and found out that route does
+              not exist. Click one of the wonderful preselected topics or type a
+              search into the bar to get some sweet images of INSERT TOPIC HERE.
+            </div>
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 

@@ -7,7 +7,6 @@ function SearchBar({ makeQuery }) {
     e.preventDefault();
 
     const query = e.target[0].value;
-    makeQuery(query);
     history.push(`/search/${query}`);
 
     e.currentTarget.reset();

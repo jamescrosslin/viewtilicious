@@ -5,7 +5,7 @@ import Loading from "./components/Loading";
 import apiKey from "./config.js";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import SearchResults from "./components/SearchResults";
 
 function App() {
@@ -49,19 +49,8 @@ function App() {
             {navs ? <Gallery data={navs[topic]} /> : <Loading />}
           </Route>
         ))}
-        {/* <Route path="/flowers">
-            <Gallery data={navs.flowers} />
-          </Route>
-          <Route path="/babies">
-            <Gallery data={navs.babies} />
-          </Route>
-          <Route path="/fruit">
-            <Gallery data={navs.fruit} />
-          </Route> */}
 
         <Route path="/search/:query">
-          {/* maybe have routes in children of gallery, jumping come from failure to render photo-container, or put a photo-container div around the home route */}
-
           <SearchResults fetchPics={fetchPics} />
         </Route>
         <Route>

@@ -10,7 +10,7 @@ import SearchResults from "./components/SearchResults";
 import NotFound from "./components/NotFound";
 
 function App() {
-  const [topics, setTopics] = useState(["Flowers", "Babies", "Fruit"]);
+  const [topics, setTopics] = useState(["Flowers", "Sloths", "Fruit"]);
 
   const [navs, setNavs] = useState(null);
 

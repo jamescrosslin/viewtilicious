@@ -7,6 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import SearchResults from "./components/SearchResults";
+import NotFound from "./components/NotFound";
 
 function App() {
   const [topics, setTopics] = useState(["Flowers", "Babies", "Fruit"]);
@@ -54,11 +55,12 @@ function App() {
           <SearchResults fetchPics={fetchPics} />
         </Route>
         <Route>
-          <div>
+          {/* <div>
             Oops, you went too hard in the URL and found out that route does not
             exist. Click one of the wonderful preselected topics or type a
             search into the bar to get some sweet images of INSERT TOPIC HERE.
-          </div>
+          </div> */}
+          <NotFound />
         </Route>
       </Switch>
     </div>

@@ -1,7 +1,6 @@
 import React from "react";
 
 function Photo({ delay, id, secret, server, title }) {
-  console.log(delay);
   return (
     <li style={{ animationDelay: `${delay}s` }}>
       <img

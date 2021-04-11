@@ -11,8 +11,7 @@ function SearchResults({ fetchPics }) {
   useEffect(() => {
     async function handleFetch() {
       await setLoading(() => true);
-      const searchTerms = query.split(/[^\w\d]/).join("+");
-      const photo = await fetchPics(searchTerms);
+      const photo = await fetchPics(query);
       setTimeout(() => setLoading(() => false), 2000);
       await setPhotos(() => photo);
     }

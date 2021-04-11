@@ -4,7 +4,7 @@ import Gallery from "./components/Gallery";
 import Loading from "./components/Loading";
 import apiKey from "./config.js";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
 import SearchResults from "./components/SearchResults";
 import NotFound from "./components/NotFound";
@@ -14,16 +14,29 @@ function App() {
 
   const [navs, setNavs] = useState(null);
 
-  async function fetchPics(tags) {
+  const fetchPics = useCallback(async (tag) => {
+    tag = tag.split(/[^\w\d]/).join("+");
     const {
       data: {
         photos: { photo },
       },
     } = await axios.get(
-      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tags}&tag_mode=all&per_page=24&format=json&nojsoncallback=1`
+      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&tag_mode=all&per_page=24&format=json&nojsoncallback=1`
     );
     return photo;
+  }, []);
+
+  function handleSetTopics(newTopics) {
+    window.localStorage.setItem("topics", JSON.stringify(newTopics));
+    setTopics(() => newTopics);
   }
+
+  useEffect(() => {
+    if (window.localStorage.topics) {
+      const savedTopics = window.localStorage.getItem("topics");
+      setTopics(() => JSON.parse(savedTopics));
+    }
+  }, []);
 
   useEffect(() => {
     async function getTopics(topics) {
@@ -32,6 +45,7 @@ function App() {
         const results = await fetchPics(topic);
         navObj[topic] = results;
       }
+
       setNavs(navObj);
     }
     getTopics(topics);
@@ -40,7 +54,7 @@ function App() {
   return (
     <div className="container">
       <SearchBar />
-      <Nav topics={topics} />
+      <Nav topics={topics} changeTopics={handleSetTopics} />
       <Switch>
         <Route exact path="/">
           <h2>Click around or search!</h2>

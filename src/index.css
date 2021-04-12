@@ -62,8 +62,13 @@ a {
   color: #fff;
 }
 
+.main-nav button {
+  cursor: "pointer";
+}
+
 .main-nav .active,
 .main-nav a:hover,
+.main-nav button:hover,
 .search-form button:hover {
   background-color: #275270;
 }

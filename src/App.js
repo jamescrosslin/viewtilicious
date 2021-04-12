@@ -10,7 +10,7 @@ import SearchResults from "./components/SearchResults";
 import NotFound from "./components/NotFound";
 
 function App() {
-  const [topics, setTopics] = useState(["Flowers", "Sloths", "Fruit"]);
+  const [topics, setTopics] = useState();
 
   const [navs, setNavs] = useState(null);
 
@@ -34,8 +34,9 @@ function App() {
   useEffect(() => {
     if (window.localStorage.topics) {
       const savedTopics = window.localStorage.getItem("topics");
-      setTopics(() => JSON.parse(savedTopics));
+      return setTopics(() => JSON.parse(savedTopics));
     }
+    setTopics(() => ["Flowers", "Sloths", "Fruit"]);
   }, []);
 
   useEffect(() => {
@@ -48,32 +49,29 @@ function App() {
 
       setNavs(navObj);
     }
-    getTopics(topics);
-  }, [topics]);
+
+    if (topics) getTopics(topics);
+  }, [topics, fetchPics]);
 
   return (
     <div className="container">
       <SearchBar />
-      <Nav topics={topics} changeTopics={handleSetTopics} />
+      {topics && <Nav topics={topics} changeTopics={handleSetTopics} />}
       <Switch>
         <Route exact path="/">
           <h2>Click around or search!</h2>
         </Route>
-        {topics.map((topic, i) => (
-          <Route key={`${i}`} path={`/${topic}`}>
-            {navs ? <Gallery data={navs[topic]} /> : <Loading />}
-          </Route>
-        ))}
+        {topics &&
+          topics.map((topic, i) => (
+            <Route key={`${i}`} path={`/${topic}`}>
+              {navs ? <Gallery data={navs[topic]} /> : <Loading />}
+            </Route>
+          ))}
 
         <Route path="/search/:query">
           <SearchResults fetchPics={fetchPics} />
         </Route>
         <Route>
-          {/* <div>
-            Oops, you went too hard in the URL and found out that route does not
-            exist. Click one of the wonderful preselected topics or type a
-            search into the bar to get some sweet images of INSERT TOPIC HERE.
-          </div> */}
           <NotFound />
         </Route>
       </Switch>

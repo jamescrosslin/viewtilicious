@@ -1,21 +1,30 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 function Nav({ topics, changeTopics }) {
   const [isEditing, setIsEditing] = useState(false);
   const [inputs, setInputs] = useState(topics);
-  console.log(topics);
+  const history = useHistory();
 
-  async function handleTopicChange(newTopics) {
-    newTopics = newTopics.map((topic) => topic.split(/[^\w\d]/).join("+"));
+  async function handleTopicChange(e) {
+    e.preventDefault();
+
+    const newTopics = [...inputs].map((topic) =>
+      topic.split(/[^\w\d]/).join("+")
+    );
     await changeTopics(newTopics);
+    history.push("/");
     setIsEditing((editing) => !editing);
   }
 
   // need to make it so that app.js knows to hold off rendering a new path until new value is fetched. need some top level loading? maybe find what I need to wait for in my code
 
   return isEditing ? (
-    <form className="main-nav" onSubmit={() => handleTopicChange(inputs)}>
+    <form
+      className="main-nav"
+      style={{ outline: "1px solid black", position: "relative" }}
+      onSubmit={handleTopicChange}
+    >
       <ul>
         {topics.map((topic, i) => (
           <li key={i}>

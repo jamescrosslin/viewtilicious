@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
 
-function SearchBar({ makeQuery }) {
+function SearchBar() {
   const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();

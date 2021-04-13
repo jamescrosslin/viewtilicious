@@ -10,7 +10,7 @@ import SearchResults from "./components/SearchResults";
 import NotFound from "./components/NotFound";
 
 function App() {
-  const [topics, setTopics] = useState();
+  const [topics] = useState(["Flowers", "Sloths", "Fruit"]);
 
   const [navs, setNavs] = useState(null);
 
@@ -26,19 +26,6 @@ function App() {
     return photo;
   }, []);
 
-  function handleSetTopics(newTopics) {
-    window.localStorage.setItem("topics", JSON.stringify(newTopics));
-    setTopics(() => newTopics);
-  }
-
-  useEffect(() => {
-    if (window.localStorage.topics) {
-      const savedTopics = window.localStorage.getItem("topics");
-      return setTopics(() => JSON.parse(savedTopics));
-    }
-    setTopics(() => ["Flowers", "Sloths", "Fruit"]);
-  }, []);
-
   useEffect(() => {
     async function getTopics(topics) {
       const navObj = {};
@@ -50,23 +37,22 @@ function App() {
       setNavs(navObj);
     }
 
-    if (topics) getTopics(topics);
+    getTopics(topics);
   }, [topics, fetchPics]);
 
   return (
     <div className="container">
       <SearchBar />
-      {topics && <Nav topics={topics} changeTopics={handleSetTopics} />}
+      <Nav topics={topics} />
       <Switch>
         <Route exact path="/">
           <h2>Click around or search!</h2>
         </Route>
-        {topics &&
-          topics.map((topic, i) => (
-            <Route key={`${i}`} path={`/${topic}`}>
-              {navs ? <Gallery data={navs[topic]} /> : <Loading />}
-            </Route>
-          ))}
+        {topics.map((topic, i) => (
+          <Route key={`${i}`} path={`/${topic}`}>
+            {navs ? <Gallery data={navs[topic]} /> : <Loading />}
+          </Route>
+        ))}
 
         <Route path="/search/:query">
           <SearchResults fetchPics={fetchPics} />

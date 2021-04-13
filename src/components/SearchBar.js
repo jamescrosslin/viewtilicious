@@ -17,7 +17,7 @@ function SearchBar() {
     <form className="search-form" onSubmit={handleSubmit}>
       <input
         type="search"
-        placeholder="Search for an image..."
+        placeholder="Search for an image using letters and digits only..."
         name="search"
         required
       ></input>

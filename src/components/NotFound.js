@@ -1,5 +1,4 @@
 import React from "react";
-import { matchPath, useLocation, useParams, useRouteMatch } from "react-router";
 import notfound from "../img/404.gif";
 
 function NotFound() {

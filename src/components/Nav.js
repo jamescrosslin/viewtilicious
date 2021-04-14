@@ -10,6 +10,7 @@ function Nav({ topics }) {
   function makeNavs(values) {
     return values.map((topic, i) => (
       <li key={i}>
+        {/* dynamically create destinations and text */}
         <NavLink to={`/${topic}`}>{topic}</NavLink>
       </li>
     ));

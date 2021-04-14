@@ -5,7 +5,7 @@ import Gallery from "./components/Gallery";
 import Loading from "./components/Loading";
 import SearchResults from "./components/SearchResults";
 import NotFound from "./components/NotFound";
-/* Module imports */
+/* Dependency imports */
 import axios from "axios";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Route, Switch } from "react-router-dom";

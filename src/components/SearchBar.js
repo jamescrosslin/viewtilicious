@@ -1,15 +1,19 @@
-import React from "react";
+/* Dependency imports */
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 
 function SearchBar() {
+  // useHistory hook produces the history object
   const history = useHistory();
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const inputText = event.target[0].value;
+    // replaces all non-word and non-digit characters with a + symbol
+    const query = inputText.replaceAll(/[^\w\d]/g, "+");
+    // pushes the route to the
+    history.push(`/search/${query}`);
 
-    const query = e.target[0].value;
-    history.push(`/search/${query.replaceAll(/[^\w\d]/g, "+")}`);
-
-    e.currentTarget.reset();
+    event.currentTarget.reset();
     return false;
   };
 

@@ -1,27 +1,42 @@
+/* Component Imports */
 import SearchBar from "./components/SearchBar";
 import Nav from "./components/Nav";
 import Gallery from "./components/Gallery";
 import Loading from "./components/Loading";
-import apiKey from "./config.js";
+import SearchResults from "./components/SearchResults";
+import NotFound from "./components/NotFound";
+/* Module imports */
 import axios from "axios";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Route, Switch } from "react-router-dom";
-import SearchResults from "./components/SearchResults";
-import NotFound from "./components/NotFound";
+/* Secrets imports */
+import apiKey from "./config.js";
 
 function App() {
+  // introducting topics declaritively is conducive to future modularity
   const topics = useMemo(() => ["Flowers", "Sloths", "Fruit"], []);
 
   /* the useState hook sets the navs state initial value to null;
     the navs state is used to store fetched data for preselected navs and to 
-    cue the program that the data is ready for rendering gallery components
-  */
+    cue the program that the data is ready for rendering gallery components */
   const [navs, setNavs] = useState(null);
+
+  /**
+   * @function makeTopicRoutes
+   * @returns {Array} route component leading to either a gallery of photos or a loading animation if data is unavailable
+   */
+  function makeTopicRoutes() {
+    return topics.map((topic, i) => (
+      <Route key={`${i}`} path={`/${topic}`}>
+        {navs ? <Gallery data={navs[topic]} /> : <Loading />}
+      </Route>
+    ));
+  }
 
   /**
    * @function fetchPics
    * @param {String} tag a string of search terms
-   * @description fetches picture data from the Flickr api based on search terms
+   * @returns array of photo data from Flickr
    */
   const fetchPics = useCallback(async (tag) => {
     // removes any non-digit or non-letter characters and replaces them with a + symbol
@@ -70,14 +85,10 @@ function App() {
       <Nav topics={topics} />
       <Switch>
         <Route exact path="/">
-          <h2>Click around or search!</h2>
+          <h2>Click around or search for images!</h2>
         </Route>
-        {topics.map((topic, i) => (
-          <Route key={`${i}`} path={`/${topic}`}>
-            {navs ? <Gallery data={navs[topic]} /> : <Loading />}
-          </Route>
-        ))}
-
+        {makeTopicRoutes()}
+        {/* route parameter gives value of route to SearchResults */}
         <Route path="/search/:query">
           <SearchResults fetchPics={fetchPics} />
         </Route>

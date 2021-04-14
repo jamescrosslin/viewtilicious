@@ -158,7 +158,7 @@ a {
 .loading {
   display: flex;
   justify-content: center;
-  color: purple;
+  color: #438bbd;
   font-size: 30px;
   margin-top: 50px;
 }

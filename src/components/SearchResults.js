@@ -22,7 +22,8 @@ function SearchResults({ fetchPics }) {
       await setIsLoading(true);
       const photo = await fetchPics(query);
       await setPhotos(photo);
-      setIsLoading(false);
+      //ensures the animation gets a cycle in to smooth transition
+      setTimeout(() => setIsLoading(false), 1000);
     }
 
     handleFetch();

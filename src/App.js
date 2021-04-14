@@ -4,18 +4,30 @@ import Gallery from "./components/Gallery";
 import Loading from "./components/Loading";
 import apiKey from "./config.js";
 import axios from "axios";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Route, Switch } from "react-router-dom";
 import SearchResults from "./components/SearchResults";
 import NotFound from "./components/NotFound";
 
 function App() {
-  const [topics] = useState(["Flowers", "Sloths", "Fruit"]);
+  const topics = useMemo(() => ["Flowers", "Sloths", "Fruit"], []);
 
+  /* the useState hook sets the navs state initial value to null;
+    the navs state is used to store fetched data for preselected navs and to 
+    cue the program that the data is ready for rendering gallery components
+  */
   const [navs, setNavs] = useState(null);
 
+  /**
+   * @function fetchPics
+   * @param {String} tag a string of search terms
+   * @description fetches picture data from the Flickr api based on search terms
+   */
   const fetchPics = useCallback(async (tag) => {
-    tag = tag.split(/[^\w\d]/).join("+");
+    // removes any non-digit or non-letter characters and replaces them with a + symbol
+    tag = tag.replaceAll(/[^\w\d]/g, "+");
+
+    // calls the flicker api and destructures the return
     const {
       data: {
         photos: { photo },
@@ -26,19 +38,31 @@ function App() {
     return photo;
   }, []);
 
-  useEffect(() => {
-    async function getTopics(topics) {
-      const navObj = {};
-      for (const topic of topics) {
-        const results = await fetchPics(topic);
-        navObj[topic] = results;
+  useEffect(
+    () => {
+      /**
+       * @function getTopicData
+       * @param {Array} topics
+       * @description handles fetching data for all predetermined page topics and sets the nav state to contain the image data
+       */
+      async function getTopicData(topics) {
+        //use Promise.all to take advantage of parallelism
+        const results = await Promise.all(
+          topics.map((topic) => fetchPics(topic))
+        );
+        //use reduce to create an object from our photo data, then set the nav state
+        const navObj = topics.reduce((acc, topic, i) => {
+          acc[topic] = results[i];
+          return acc;
+        }, {});
+        setNavs(navObj);
       }
 
-      setNavs(navObj);
-    }
-
-    getTopics(topics);
-  }, [topics, fetchPics]);
+      getTopicData(topics);
+    },
+    // activates only on initial page load due to useMemo and useCallback on dependencies
+    [topics, fetchPics]
+  );
 
   return (
     <div className="container">

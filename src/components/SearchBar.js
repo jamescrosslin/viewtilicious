@@ -7,7 +7,7 @@ function SearchBar() {
     e.preventDefault();
 
     const query = e.target[0].value;
-    history.push(`/search/${query}`);
+    history.push(`/search/${query.replaceAll(/[^\w\d]/g, "+")}`);
 
     e.currentTarget.reset();
     return false;

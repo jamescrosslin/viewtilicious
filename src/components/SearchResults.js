@@ -1,24 +1,35 @@
+/* Dependency imports */
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+/* Component imports */
 import Gallery from "./Gallery";
 import Loading from "./Loading";
 
 function SearchResults({ fetchPics }) {
   const { query } = useParams();
   const [photos, setPhotos] = useState(null);
-  const [loading, setLoading] = useState(true);
+  /* isLoading state keeps track of if data fetching,
+     starts at true to prevent jerky page render */
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    /**
+     * @function handleFetch
+     * @description controls isLoading and photos states to
+     *    appropriately render resources
+     */
     async function handleFetch() {
-      await setLoading(() => true);
+      await setIsLoading(true);
       const photo = await fetchPics(query);
-      setTimeout(() => setLoading(() => false), 2000);
-      await setPhotos(() => photo);
+      await setPhotos(photo);
+      setIsLoading(false);
     }
 
     handleFetch();
   }, [query, fetchPics]);
-  if (loading) {
+
+  // if data fetch has not completed, Loading component renders
+  if (isLoading) {
     return <Loading />;
   }
   return (

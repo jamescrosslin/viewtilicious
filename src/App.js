@@ -25,8 +25,8 @@ function App() {
    * @function makeTopicRoutes
    * @returns {Array} route component leading to either a gallery of photos or a loading animation if data is unavailable
    */
-  function makeTopicRoutes() {
-    return topics.map((topic, i) => (
+  function makeRoutes(values) {
+    return values.map((topic, i) => (
       <Route key={`${i}`} path={`/${topic}`}>
         {navs ? <Gallery data={navs[topic]} /> : <Loading />}
       </Route>
@@ -87,7 +87,7 @@ function App() {
         <Route exact path="/">
           <h2>Click around or search for images!</h2>
         </Route>
-        {makeTopicRoutes()}
+        {makeRoutes(topics)}
         {/* route parameter gives value of route to SearchResults */}
         <Route path="/search/:query">
           <SearchResults fetchPics={fetchPics} />

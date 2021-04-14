@@ -6,15 +6,20 @@ function SearchBar() {
   const [value, setValue] = useState("");
   // useHistory hook produces the history object
   const history = useHistory();
+
+  /**
+   * @function handleSubmit
+   * @param {SyntheticBaseEvent} event
+   */
   const handleSubmit = (event) => {
+    console.log(event);
     event.preventDefault();
     // replaces all non-word and non-digit characters with a + symbol
     const query = value.replaceAll(/[^\w\d]/g, "+");
-    // pushes the route to the
+    // pushes the route to the browser
     history.push(`/search/${query}`);
     setValue("");
     event.currentTarget.reset();
-    return false;
   };
 
   return (
@@ -23,8 +28,10 @@ function SearchBar() {
         type="search"
         placeholder="Search for an image using letters and digits only..."
         name="search"
+        // sets state for controlled component
         onChange={(e) => setValue(e.target.value)}
         value={value}
+        autoFocus
         required
       ></input>
       <button type="submit" className="submit-button">

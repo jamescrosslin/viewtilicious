@@ -3,16 +3,16 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 
 function SearchBar() {
+  const [value, setValue] = useState("");
   // useHistory hook produces the history object
   const history = useHistory();
   const handleSubmit = (event) => {
     event.preventDefault();
-    const inputText = event.target[0].value;
     // replaces all non-word and non-digit characters with a + symbol
-    const query = inputText.replaceAll(/[^\w\d]/g, "+");
+    const query = value.replaceAll(/[^\w\d]/g, "+");
     // pushes the route to the
     history.push(`/search/${query}`);
-
+    setValue("");
     event.currentTarget.reset();
     return false;
   };
@@ -23,6 +23,8 @@ function SearchBar() {
         type="search"
         placeholder="Search for an image using letters and digits only..."
         name="search"
+        onChange={(e) => setValue(e.target.value)}
+        value={value}
         required
       ></input>
       <button type="submit" className="submit-button">

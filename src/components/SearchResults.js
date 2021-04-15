@@ -30,10 +30,9 @@ function SearchResults({ fetchPics }) {
   }, [query, fetchPics]);
 
   // if data fetch has not completed, Loading component renders
-  if (isLoading) {
-    return <Loading />;
-  }
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <Gallery data={photos}>
       <h2>Results</h2>
     </Gallery>

@@ -5,11 +5,14 @@ function NotFound() {
   return (
     <div>
       <h3>
-        Sorry, we can't find that page. Try the search bar or the preselected
+        Sorry, we can't find that page. Try the search bar or the pre-selected
         topics!
       </h3>
       <figure>
-        <img src={notfound} alt="A woman sitting on top of 404 block letters" />
+        <img
+          src={notfound}
+          alt="A broken robot with error on its screen and large floating 404 numbers."
+        />
         <figcaption>
           <a
             href="http://storyset.com/web"

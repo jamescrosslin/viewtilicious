@@ -1,4 +1,50 @@
-# Getting Started with Create React App
+# Viewtilicious
+
+Viewtilicious is an image search and diplay app utilizing the Flickr API. Viewtilicious enables a user to choose a pre-selected topic or enter a search term to display a gallery of 24 related images.
+
+## How to use Viewtilicious
+
+### Prerequisites
+
+You'll need to do the following before the app is usable:
+
+- Familiarize yourself with [Create React App](https://github.com/facebook/create-react-app).
+- Retrieve a Flickr API key
+- Create a `config.js` file with the following structure and save it to the `src` folder:
+
+```js
+const apiKey = "Your key here";
+
+export default apiKey;
+```
+
+- Don't forget to run
+
+```shell
+  $ npm install
+```
+
+### Run the program
+
+To start the program, in your command line type:
+
+```shell
+  $ npm start
+```
+
+### Customization
+
+If you'd like to change the default topics, they are defined in `App.js`. Because of the declarative nature of Viewtilicious, you can change all the dependent routes and views just by changing the array of strings returned by the `topics` function.
+
+### Animations
+
+Custom animations have been created for the `Loading` and `Photo` components. The `Loading` component creates a mechanical wave while data is being fetched. Each `Photo` component flips in from the left side of the screen while increasing in opacity. Each component receives an animation delay based on their order of composition. The effect is different based on layout:
+
+- In a four column layout, columns of images flip in from right to left.
+- In 2-3 columns, and interesting staggered flip in effect happens similar to a checkerboard.
+- In a single column, the images flip in batches of four from bottom to top.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

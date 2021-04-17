@@ -19,9 +19,9 @@ function SearchResults({ fetchPics }) {
      *    appropriately render resources
      */
     async function handleFetch() {
-      await setIsLoading(true);
+      setIsLoading(true);
       const photo = await fetchPics(query);
-      await setPhotos(photo);
+      setPhotos(photo);
       //ensures the animation gets a cycle in to smooth transition
       setTimeout(() => setIsLoading(false), 1000);
     }

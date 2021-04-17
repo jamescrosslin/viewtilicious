@@ -10,7 +10,7 @@ function Gallery({ data, children }) {
   function makePhotos(photoData) {
     return photoData.map((pic, i, arr) => (
       <Photo
-        // delays the entry of components based on index so that a 4-column grid in order from rightmost column to leftmost
+        // delays the entry of components based on index so that a 4-column grid enters in order from rightmost column to leftmost
         // in different views with less columns creates a cool checkerboard entrance
         delay={(4 - (i % 4)) / 10}
         key={pic.id}

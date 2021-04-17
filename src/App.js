@@ -14,7 +14,7 @@ import apiKey from "./config.js";
 
 function App() {
   // introducting topics declaritively is conducive to future modularity
-  const topics = useMemo(() => ["Flowers", "Sloths", "Fruit"], []);
+  const topics = useRef(["Flowers", "Sloths", "Fruit"]);
 
   /* the useState hook sets the navs state initial value to null;
     the navs state is used to store fetched data for preselected navs and to 
@@ -75,7 +75,7 @@ function App() {
 
       getTopicData(topics);
     },
-    // activates only on initial page load due to useMemo and useCallback on dependencies
+    // activates only on initial page load due to useRef and useCallback on dependencies
     [topics, fetchPics]
   );
 

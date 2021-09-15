@@ -1,21 +1,20 @@
 /* Component Imports */
-import SearchBar from "./components/SearchBar";
-import Nav from "./components/Nav";
-import Gallery from "./components/Gallery";
-import Loading from "./components/Loading";
-import SearchResults from "./components/SearchResults";
-import NotFound from "./components/NotFound";
+import SearchBar from './components/SearchBar';
+import Nav from './components/Nav';
+import Gallery from './components/Gallery';
+import Loading from './components/Loading';
+import SearchResults from './components/SearchResults';
+import NotFound from './components/NotFound';
 /* Dependency imports */
-import axios from "axios";
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { Route, Switch } from "react-router-dom";
+import axios from 'axios';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { Route, Switch } from 'react-router-dom';
 /* Secrets imports */
-import apiKey from "./config.js";
+import apiKey from './config.js';
 
+// introducting topics declaritively is conducive to future modularity
+const topics = ['Flowers', 'Sloths', 'Fruit'];
 function App() {
-  // introducting topics declaritively is conducive to future modularity
-  const topics = useRef(["Flowers", "Sloths", "Fruit"]);
-
   /* the useState hook sets the navs state initial value to null;
     the navs state is used to store fetched data for preselected navs and to 
     cue the program that the data is ready for rendering gallery components */
@@ -40,7 +39,7 @@ function App() {
    */
   const fetchPics = useCallback(async (tag) => {
     // removes any non-digit or non-letter characters and replaces them with a + symbol
-    tag = tag.replaceAll(/[^\w\d]/g, "+");
+    tag = tag.replaceAll(/[^\w\d]/g, '+');
 
     // calls the flicker api and destructures the return
     const {
@@ -48,7 +47,7 @@ function App() {
         photos: { photo },
       },
     } = await axios.get(
-      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&tag_mode=all&per_page=24&format=json&nojsoncallback=1`
+      `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${tag}&tag_mode=all&per_page=24&format=json&nojsoncallback=1`,
     );
     return photo;
   }, []);
@@ -62,9 +61,7 @@ function App() {
        */
       async function getTopicData(topics) {
         //use Promise.all to take advantage of parallelism
-        const results = await Promise.all(
-          topics.map((topic) => fetchPics(topic))
-        );
+        const results = await Promise.all(topics.map((topic) => fetchPics(topic)));
         //use reduce to create an object from our photo data, then set the nav state
         const navObj = topics.reduce((acc, topic, i) => {
           acc[topic] = results[i];
@@ -76,7 +73,7 @@ function App() {
       getTopicData(topics);
     },
     // activates only on initial page load due to useRef and useCallback on dependencies
-    [topics, fetchPics]
+    [topics, fetchPics],
   );
 
   return (

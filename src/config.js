@@ -1,3 +1,3 @@
-const apiKey = process.env.FLICKR_KEY;
+const apiKey = process.env.REACT_APP_FLICKR_KEY;
 
 export default apiKey;
